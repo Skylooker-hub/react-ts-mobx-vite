@@ -15,11 +15,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": ".",    //未设置 "baseUrl" 时，不允许使用非相对路径。
+    "baseUrl": "./src",    //未设置 "baseUrl" 时，不允许使用非相对路径。
     "paths": {
-      "apis/*": ["src/apis/*"], // 使用别名下的模块
-      "stores/*": ["src/stores/*"],
-      "src/*": ["src/*"]
+      "apis/*": ["./apis/*"], // 使用别名下的模块
+      "stores/*": ["./stores/*"],
+      "src/*": ["./*"]
     }
   },
   "include": ["src"],
