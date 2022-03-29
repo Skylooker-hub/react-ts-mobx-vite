@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "src/App";
-import { StoreContext, store } from "src/stores/rootStore";
+import { StoreContext, store } from "stores/rootStore";
 
 ReactDOM.render(
   <React.StrictMode>
