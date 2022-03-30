@@ -4,7 +4,7 @@
 
 ## Features
 
-- 包括网络请求、外部状态管理在内全部由 TypeScript 编写。
+- 包括[网络请求](#http-request)、[外部状态管理](#external-state-manager)在内全部由 TypeScript 编写。
 
 - 集成 prettier、 eslint 等代码规范化工具。
 
