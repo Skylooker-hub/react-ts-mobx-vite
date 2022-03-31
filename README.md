@@ -2,6 +2,15 @@
 
 这是一个基于 Vite 的 React 应用程序模板。
 
+## Usage
+
+使用 degit 导入模板
+
+```bash
+mkdir <your dirname> && cd <your dirname>  # your dir should be empty!
+npx degit git@github.com:Skylooker-hub/react-ts-mobx-vite.git
+```
+
 ## Features
 
 - 包括[网络请求](#http-request)、[外部状态管理](#external-state-manager)在内全部由 TypeScript 编写。
