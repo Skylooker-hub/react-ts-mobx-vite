@@ -1,6 +1,7 @@
-import { observer } from "mobx-react-lite";
-import { useContext } from "react";
-import { StoreContext } from "src/stores/rootStore";
+import React from 'react';
+import { observer } from 'mobx-react-lite';
+import { useContext } from 'react';
+import { StoreContext } from 'src/stores/rootStore';
 
 function App() {
   const store = useContext(StoreContext);

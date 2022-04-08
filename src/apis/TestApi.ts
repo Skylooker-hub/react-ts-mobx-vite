@@ -1,4 +1,4 @@
-import { APISchema, createRequestClient } from "./request";
+import { APISchema, createRequestClient } from './request';
 
 interface TestAPISchema extends APISchema {
   getUserName: {
@@ -9,15 +9,20 @@ interface TestAPISchema extends APISchema {
       name: string;
     };
   };
+  getAge: {
+    request: {};
+    response: {};
+  };
 }
 
 const api = createRequestClient<TestAPISchema>({
-  baseURL: "",
+  baseURL: '',
   apis: {
     getUserName: {
-      method: "GET",
-      url: "123/getUserName",
+      method: 'GET',
+      url: '/getUserName',
     },
+    getAge: 'GET /gg/user',
   },
 });
 

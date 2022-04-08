@@ -1,5 +1,5 @@
-import { makeAutoObservable, reaction } from "mobx";
-import { IRootStore } from "./rootStore";
+import { makeAutoObservable, reaction } from 'mobx';
+import { IRootStore } from './rootStore';
 
 export default class Counter {
   count = 0;
@@ -7,13 +7,13 @@ export default class Counter {
   constructor(rootStore: IRootStore) {
     makeAutoObservable(this, {}, { autoBind: true });
     this.rootStore = rootStore;
-    if (localStorage.getItem("count")) {
-      this.count = parseInt(localStorage.getItem("count")!!);
+    if (localStorage.getItem('count')) {
+      this.count = parseInt(localStorage.getItem('count')!);
     }
     reaction(
       () => this.count,
       () => {
-        localStorage.setItem("count", this.count + "");
+        localStorage.setItem('count', this.count + '');
       }
     );
   }

@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestHeaders, AxiosError } from "axios";
+import axios, { AxiosInstance, AxiosRequestHeaders, AxiosError } from 'axios';
 import {
   APISchema,
   CreateRequestClient,
@@ -6,46 +6,45 @@ import {
   RequestFunction,
   RequestOptions,
   RequestPath,
-} from "./request.d";
+} from './request.d';
 
-export type {APISchema}
+export type { APISchema };
 
-const MATCH_METHOD =
-  /^(GET|POST|PUT|DELETE|HEAD|OPTIONS|CONNECT|TRACE|PATCH)\s+/;
+const MATCH_METHOD = /^(GET|POST|PUT|DELETE|HEAD|OPTIONS|CONNECT|TRACE|PATCH)\s+/;
 const MATCH_PATH_PARAMS = /:(\w+)/g;
-const USE_DATA_METHODS = ["POST", "PUT", "PATCH", "DELETE"];
+const USE_DATA_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
 
 function attachAPI<T extends APISchema>(
   client: AxiosInstance,
-  apis: CreateRequestConfig<T>["apis"]
+  apis: CreateRequestConfig<T>['apis']
 ): CreateRequestClient<T> {
   const hostApi: CreateRequestClient<T> = Object.create(null);
   for (const apiName in apis) {
     const apiConfig = apis[apiName];
     // 配置为一个函数
-    if (typeof apiConfig === "function") {
+    if (typeof apiConfig === 'function') {
       hostApi[apiName] = apiConfig as RequestFunction;
       continue;
     }
     let apiOptions = {};
     let apiPath = apiConfig as RequestPath;
     // 配置为一个对象
-    if (typeof apiConfig === "object") {
-      const {url, ...rest } = apiConfig as RequestOptions;
-      apiPath = url;
+    if (typeof apiConfig === 'object') {
+      const { url, ...rest } = apiConfig as RequestOptions;
+      apiPath = url as RequestPath;
       apiOptions = rest;
     }
     hostApi[apiName] = (params, options) => {
       const _params = { ...(params || {}) };
       // 匹配路径中请求方法，如：'POST /api/test'
-      const [prefix, method] = apiPath.match(MATCH_METHOD) || ["GET ", "GET"];
+      const [prefix, method] = apiPath.match(MATCH_METHOD) || ['GET ', 'GET'];
       // 剔除掉 ”POST “ 前缀
-      let url = apiPath.replace(prefix, "");
+      let url = apiPath.replace(prefix, '');
       // 匹配路径中的参数占位符， 如 '/api/:user_id/:res_id'
       const matchParams = apiPath.match(MATCH_PATH_PARAMS);
       if (matchParams) {
         matchParams.forEach(match => {
-          const key = match.replace(":", "");
+          const key = match.replace(':', '');
           if (Reflect.has(_params, key)) {
             url = url.replace(match, Reflect.get(_params, key));
             Reflect.deleteProperty(_params, key);
@@ -92,9 +91,7 @@ export function createRequestClient<T extends APISchema>(
   client.interceptors.response.use(
     res => res,
     (error: AxiosError) => {
-      const requestError = requestConfig.errorHandler
-        ? requestConfig.errorHandler(error)
-        : error;
+      const requestError = requestConfig.errorHandler ? requestConfig.errorHandler(error) : error;
       return Promise.reject(requestError);
     }
   );
