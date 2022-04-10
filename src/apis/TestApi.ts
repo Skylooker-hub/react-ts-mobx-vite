@@ -17,6 +17,12 @@ interface TestAPISchema extends APISchema {
 
 const api = createRequestClient<TestAPISchema>({
   baseURL: '',
+  requestInterceptor(config) {
+    return Promise.resolve(config);
+  },
+  responseInterceptor(res) {
+    return Promise.resolve(res);
+  },
   apis: {
     getUserName: {
       method: 'GET',

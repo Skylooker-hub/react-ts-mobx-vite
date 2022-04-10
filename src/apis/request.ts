@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestHeaders, AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosRequestHeaders, AxiosError, Method } from 'axios';
 import {
   APISchema,
   CreateRequestClient,
@@ -34,7 +34,7 @@ function attachAPI<T extends APISchema>(
       apiPath = url as RequestPath;
       apiOptions = rest;
     }
-    hostApi[apiName] = (params, options) => {
+    hostApi[apiName] = (params, options = {}) => {
       const _params = { ...(params || {}) };
       // 匹配路径中请求方法，如：'POST /api/test'
       const [prefix, method] = apiPath.match(MATCH_METHOD) || ['GET ', 'GET'];
@@ -56,7 +56,7 @@ function attachAPI<T extends APISchema>(
         : { params: _params };
       return client.request({
         url,
-        method: method.toLowerCase(),
+        method: method.toLowerCase() as Method,
         ...requestParams,
         ...apiOptions,
         ...options,
@@ -70,31 +70,48 @@ function attachAPI<T extends APISchema>(
 export function createRequestClient<T extends APISchema>(
   requestConfig: CreateRequestConfig<T>
 ): CreateRequestClient<T> {
-  const client = axios.create({
-    baseURL: requestConfig.baseURL,
-    headers: requestConfig.headers,
-  });
+  const {
+    apis,
+    headerHandlers,
+    errorHandler,
+    requestInterceptor,
+    responseInterceptor,
+    ...otherConfigs
+  } = requestConfig;
+  const client = axios.create(otherConfigs);
 
   // 附加各业务请求头
-  client.interceptors.request.use(config => {
-    const headerHandlers = (requestConfig.headerHandlers || []).map(handler => {
-      return handler(config)
-        .then((mixHeaders: AxiosRequestHeaders) => {
-          Object.assign(config.headers, mixHeaders);
-        })
-        .catch();
-    });
-    return Promise.all(headerHandlers).then(() => config);
-  });
+  client.interceptors.request.use(
+    async config => {
+      config = requestInterceptor ? await requestInterceptor(config) : config;
 
-  // 拦截请求
-  client.interceptors.response.use(
-    res => res,
+      const headerHandlersPromises = (headerHandlers || []).map((handler, index) => {
+        return handler(config)
+          .then((mixHeaders: AxiosRequestHeaders) => {
+            Object.assign(config.headers, mixHeaders);
+          })
+          .catch(() => new Error(`headerHandlers[${index}] Error!!! `));
+      });
+      await Promise.all(headerHandlersPromises);
+      return config;
+    },
     (error: AxiosError) => {
-      const requestError = requestConfig.errorHandler ? requestConfig.errorHandler(error) : error;
+      const requestError = errorHandler ? errorHandler(error) : error;
       return Promise.reject(requestError);
     }
   );
 
-  return attachAPI<T>(client, requestConfig.apis);
+  // 拦截响应
+  client.interceptors.response.use(
+    async res => {
+      res = responseInterceptor ? await responseInterceptor(res) : res;
+      return res;
+    },
+    (error: AxiosError) => {
+      const requestError = errorHandler ? errorHandler(error) : error;
+      return Promise.reject(requestError);
+    }
+  );
+
+  return attachAPI<T>(client, apis);
 }
