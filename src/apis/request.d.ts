@@ -29,24 +29,23 @@ type RequestOptions = {
 };
 
 /**  自定义函数 */
-type RequestFunction<P = Record<string, any> | void, R = any> = (
+type RequestFunction<P = Record<string, any>, R = any> = (
   params: P,
   options?: Omit<AxiosRequestConfig, 'method'>
 ) => Promise<R>;
 
-type APIConfig = RequestPath | RequestOptions | RequestFunction;
+type APIConfig = RequestPath | RequestOptions;
 
 type HeaderHandler = (config?: AxiosRequestConfig) => Promise<AxiosRequestHeaders>;
 type RequestErrorHandler = (error: AxiosError) => void;
 
+type APIType = {
+  request: Record<string, any>;
+  response: any;
+};
+
 /** 接口约束 */
-type APISchema = Record<
-  string,
-  {
-    request: Record<string, any>;
-    response: Record<string, any>;
-  }
->;
+type APISchema = Record<string, APIType>;
 
 type CreateRequestConfig<T extends APISchema> = {
   /** 动态添加header */
@@ -58,7 +57,12 @@ type CreateRequestConfig<T extends APISchema> = {
   /** 拦截响应 */
   responseInterceptor?: (res: AxiosResponse) => Promise<AxiosResponse>;
   apis: {
-    [K in keyof RemoveIndexSignature<T>]: APIConfig;
+    [K in keyof RemoveIndexSignature<T>]:
+      | RequestFunction<
+          RemoveIndexSignature<T>[K]['request'],
+          RemoveIndexSignature<T>[K]['response']
+        >
+      | APIConfig;
   };
 } & OmitArray<AxiosRequestConfig, ['url', 'method']>;
 
@@ -66,6 +70,6 @@ type CreateRequestConfig<T extends APISchema> = {
 type CreateRequestClient<T extends APISchema> = {
   [K in keyof RemoveIndexSignature<T>]: RequestFunction<
     RemoveIndexSignature<T>[K]['request'],
-    AxiosResponse<RemoveIndexSignature<T>[K]['response']>
+    RemoveIndexSignature<T>[K]['response']
   >;
 };

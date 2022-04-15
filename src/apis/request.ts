@@ -3,7 +3,6 @@ import {
   APISchema,
   CreateRequestClient,
   CreateRequestConfig,
-  RequestFunction,
   RequestOptions,
   RequestPath,
 } from './request.d';
@@ -23,7 +22,7 @@ function attachAPI<T extends APISchema>(
     const apiConfig = apis[apiName];
     // 配置为一个函数
     if (typeof apiConfig === 'function') {
-      hostApi[apiName] = apiConfig as RequestFunction;
+      hostApi[apiName] = apiConfig;
       continue;
     }
     let apiOptions = {};
