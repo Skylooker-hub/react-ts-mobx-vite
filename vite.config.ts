@@ -9,7 +9,7 @@ const commonConfig: UserConfig = {
   plugins: [react()],
   resolve: {
     alias: {
-      src: path.join(__dirname, 'src'),
+      '~': path.join(__dirname, 'src'),
       apis: path.join(__dirname, 'src/apis'),
       stores: path.join(__dirname, 'src/stores'),
     },

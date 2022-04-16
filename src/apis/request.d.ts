@@ -18,20 +18,23 @@ type OmitArray<T, K extends Array<string | number | symbol>> = {
   [Key in keyof T as Includes<K, Key> extends true ? never : Key]: T[Key];
 };
 
+type RequiredArray<T, K extends Array<string | number | symbol>> = {
+  [Key in keyof T as Includes<K, Key> extends true ? Key : never]-?: T[Key];
+} & OmitArray<T, K>;
+
 /**  路径配置 */
-type RequestPath = `${Uppercase<RequestOptions['method']>} ${string}`;
+type RequestPath = `${RequestOptions['method']} ${string}`;
 
 /**  选项配置 */
-type RequestOptions = {
-  url: string;
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD' | 'OPTIONS' | 'CONNECT' | 'TRACE' | 'PATCH';
-  headers?: AxiosRequestHeaders;
-};
+type RequestOptions = RequiredArray<
+  OmitArray<AxiosRequestConfig, ['params', 'data']>,
+  ['url', 'method']
+>;
 
 /**  自定义函数 */
 type RequestFunction<P = Record<string, any>, R = any> = (
   params: P,
-  options?: Omit<AxiosRequestConfig, 'method'>
+  options?: AxiosRequestConfig
 ) => Promise<R>;
 
 type APIConfig = RequestPath | RequestOptions;
@@ -64,7 +67,7 @@ type CreateRequestConfig<T extends APISchema> = {
         >
       | APIConfig;
   };
-} & OmitArray<AxiosRequestConfig, ['url', 'method']>;
+} & OmitArray<AxiosRequestConfig, ['url', 'method', 'params', 'data']>;
 
 /**  创建请求客户端的类型约束 */
 type CreateRequestClient<T extends APISchema> = {

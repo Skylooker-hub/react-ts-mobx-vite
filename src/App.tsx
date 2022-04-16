@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useContext, useEffect } from 'react';
-import { StoreContext } from 'src/stores/rootStore';
+import { StoreContext } from '~/stores/rootStore';
 import testApi from 'apis/TestApi';
 
 function App() {

@@ -68,9 +68,12 @@ const api = createRequestClient<TestAPISchema>({
       url: '/delay/:delay',
       method: 'GET',
     },
-    '/delay/:delay_post': 'POST /delay/:delay',
+    '/delay/:delay_post': {
+      url: '/delay/:delay',
+      method: 'POST',
+    },
     '/base64/:value_get': 'GET /base64/:value',
-    '/form_post'({ custname }, options) {
+    '/form_post': ({ custname }, options) => {
       const data = new URLSearchParams();
       data.append('custname', custname);
       return axios.post('https://httpbin.org/post', data, {
