@@ -2,31 +2,31 @@ import axios, { AxiosResponse } from 'axios';
 import { APISchema, createRequestClient } from '@huang1997/axits';
 
 interface TestAPISchema extends APISchema {
-  '/ip_get': {
+  get_ip: {
     request: {};
     response: {
       origin: string;
     };
   };
-  '/delay/:delay_get': {
+  get_delay: {
     request: {
       delay: number;
     };
     response: {};
   };
-  '/delay/:delay_post': {
+  post_delay: {
     request: {
       delay: number;
     };
     response: {};
   };
-  '/base64/:value_get': {
+  get_base64: {
     request: {
       value: string;
     };
     response: string;
   };
-  '/form_post': {
+  post_form: {
     request: {
       custname: string;
       custtel?: string;
@@ -63,17 +63,17 @@ const api = createRequestClient<TestAPISchema>({
     return Promise.resolve(res.data);
   },
   apis: {
-    '/ip_get': 'GET /ip',
-    '/delay/:delay_get': {
+    get_ip: 'GET /ip',
+    get_delay: {
       url: '/delay/:delay',
       method: 'GET',
     },
-    '/delay/:delay_post': {
+    post_delay: {
       url: '/delay/:delay',
       method: 'POST',
     },
-    '/base64/:value_get': 'GET /base64/:value',
-    '/form_post': ({ custname }, options) => {
+    get_base64: 'GET /base64/:value',
+    post_form: ({ custname }, options) => {
       const data = new URLSearchParams();
       data.append('custname', custname);
       return axios.post('https://httpbin.org/post', data, {
