@@ -53,7 +53,7 @@ export default observer(App);
 
 网络请求方案参考[axtis](https://github.com/kinglisky/axits)，是基于 Axios 的二次封装，其优点在于有对 Api 接口进行封装，对 axios 的封装也具有扩展性。
 
-Http Request 配置文件位于**src/apis**，其中**request.d.ts**是类型声明， **request.ts**是 axits 程序， **TestApi.ts**是示例
+**TestApi.ts**是示例
 
 ## License
 

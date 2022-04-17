@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@huang1997/axits': ^0.1.8
   '@types/node': ^17.0.23
   '@types/react': ^17.0.33
   '@types/react-dom': ^17.0.10
@@ -24,6 +25,7 @@ specifiers:
   vite: ^2.8.0
 
 dependencies:
+  '@huang1997/axits': 0.1.8_axios@0.26.1
   axios: 0.26.1
   mobx: 6.4.2
   mobx-react-lite: 3.3.0_4e589064ce40a783661f96d46f38f574
@@ -339,6 +341,14 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@huang1997/axits/0.1.8_axios@0.26.1:
+    resolution: {integrity: sha512-SFaXmhwH+SQGzKdblYu27D7KA3Ye3rLjKylO803OOsounP93JVou+kooVYR6WmUK3RSLCTfHU2iQbZfkaz67Pw==}
+    peerDependencies:
+      axios: ^0.26.1
+    dependencies:
+      axios: 0.26.1
+    dev: false
 
   /@humanwhocodes/config-array/0.9.5:
     resolution: {integrity: sha512-ObyMyWxZiCu/yTisA7uzx81s40xR2fD5Cg/2Kq7G02ajkNubJf6BopgDTmDyc3U7sXpNKM8cYOw7s7Tyr+DnCw==}

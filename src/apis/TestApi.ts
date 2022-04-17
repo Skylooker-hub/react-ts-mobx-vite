@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { APISchema, createRequestClient } from './request';
+import { APISchema, createRequestClient } from '@huang1997/axits';
 
 interface TestAPISchema extends APISchema {
   '/ip_get': {
