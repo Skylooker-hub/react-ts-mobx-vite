@@ -9,7 +9,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@huang1997/axits": "^0.1.8",
+    "@huang1997/axits": "^0.2.1",
     "axios": "^0.26.1",
     "mobx": "^6.4.2",
     "mobx-react-lite": "^3.3.0",
