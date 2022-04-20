@@ -6,7 +6,12 @@ import legacy from '@vitejs/plugin-legacy';
 // https://vitejs.dev/config/
 
 const commonConfig: UserConfig = {
-  plugins: [react()],
+  plugins: [
+    react({
+      jsxRuntime: 'automatic',
+    }),
+  ],
+  server: { open: true },
   resolve: {
     alias: {
       '~': path.join(__dirname, 'src'),
@@ -31,6 +36,9 @@ export default defineConfig(({ command, mode }) => {
     const buildConfig: UserConfig = {
       // dev 独有配置
       plugins: [
+        react({
+          jsxRuntime: 'automatic',
+        }),
         legacy({
           targets: ['ie >= 11'],
           additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
